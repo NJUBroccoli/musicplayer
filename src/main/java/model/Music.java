@@ -1,9 +1,7 @@
 package model;
 
 import com.mpatric.mp3agic.*;
-import service.MusicPlay;
 
-import java.io.File;
 import java.io.IOException;
 
 public class Music extends Mp3File{
@@ -44,7 +42,7 @@ public class Music extends Mp3File{
         printMusicInfo();
     }
 
-    private void printMusicInfo(){
+    public void printMusicInfo(){
         System.out.println("##### Music Info #####\n"
                 + "ID3V" + ID3V + "\n"
                 + "length: " + lengthInSeconds + " secs\n"

@@ -20,6 +20,7 @@ public class MusicList {
             }
         }
         musics.add(music);
+
     }
     public void delete(Music music){
         Iterator<Music> iterator = musics.iterator();
