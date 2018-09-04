@@ -45,6 +45,10 @@ public class MainView extends Application {
             public void handle(ActionEvent event) {
                 FileChooser fileChooser = new FileChooser();
                 choosedFile = fileChooser.showOpenDialog(stage);
+                if (!validFileType(choosedFile)){
+                    System.out.println("Invalid file type: only .mp3 are allowed.");
+                    return;
+                }
                 try {
                     Music music = new Music(choosedFile.getPath());
                 }catch (Exception e){
@@ -55,5 +59,12 @@ public class MainView extends Application {
         });
         fileMenu.getItems().add(openFileMenu);
         menuBar.getMenus().add(fileMenu);
+    }
+
+    private boolean validFileType(File choosedFile){
+        String fileName = choosedFile.getName();
+        if ("mp3".equals(fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase()))
+            return true;
+        return false;
     }
 }
