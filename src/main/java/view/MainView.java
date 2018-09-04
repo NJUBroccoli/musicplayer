@@ -1,6 +1,5 @@
 package view;
 
-import com.mpatric.mp3agic.Mp3File;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,11 +9,12 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Music;
+import model.MusicList;
 import service.MusicPlay;
+
 import java.io.File;
 
 
@@ -23,6 +23,7 @@ public class MainView extends Application {
     private MenuBar menuBar = new MenuBar();
     private File choosedFile;
     private MediaPlayer mediaPlayer;
+    private MusicList musicList = new MusicList();
 
     public void start(Stage primaryStage) throws Exception{
         setMenu(primaryStage);
@@ -45,12 +46,16 @@ public class MainView extends Application {
             public void handle(ActionEvent event) {
                 FileChooser fileChooser = new FileChooser();
                 choosedFile = fileChooser.showOpenDialog(stage);
-                if (!validFileType(choosedFile)){
+                if (choosedFile != null && !validFileType(choosedFile)){
                     System.out.println("Invalid file type: only .mp3 are allowed.");
                     return;
                 }
                 try {
                     Music music = new Music(choosedFile.getPath());
+                    musicList.add(music);
+                   if (mediaPlayer != null)
+                       mediaPlayer.stop();
+                    mediaPlayer = MusicPlay.play(choosedFile, mediaPlayer);
                 }catch (Exception e){
                     e.printStackTrace();
                 }

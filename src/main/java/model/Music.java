@@ -1,7 +1,9 @@
 package model;
 
 import com.mpatric.mp3agic.*;
+import service.MusicPlay;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Music extends Mp3File{
@@ -110,6 +112,10 @@ public class Music extends Mp3File{
             case 0:
                 System.out.println("Read MP3 Information failed.");
         }
+    }
+
+    public String getTitle(){
+        return title;
     }
 
 }
