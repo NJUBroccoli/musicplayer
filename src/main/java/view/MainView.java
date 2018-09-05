@@ -37,6 +37,7 @@ public class MainView extends Application {
     private BorderPane borderPane = new BorderPane();
     private ImageView imageView = new ImageView();
     private Label musicNameLabel = new Label("Please choose a song to play!");
+    private Slider volumnSlider = new Slider();
 
     private File choosedFile;
     private MediaPlayer mediaPlayer;
@@ -45,6 +46,7 @@ public class MainView extends Application {
 
     public void start(Stage primaryStage) throws Exception{
         setLabel(primaryStage);
+        setSlider(primaryStage);
         setImage(primaryStage);
         setMenu(primaryStage);
         setButton(primaryStage);
@@ -58,6 +60,13 @@ public class MainView extends Application {
 
     public static void main(String[] args){
         launch(args);
+    }
+
+    private void setSlider(Stage stage){
+        volumnSlider.setPrefWidth(100);
+        volumnSlider.setValue(50);
+        volumnSlider.setShowTickLabels(true);
+        volumnSlider.setShowTickMarks(true);
     }
 
     private void setLabel(Stage stage){
@@ -81,7 +90,7 @@ public class MainView extends Application {
 
     private void setBox(Stage stage){
         hBox.setAlignment(Pos.CENTER);
-        hBox.getChildren().addAll(runButton);
+        hBox.getChildren().addAll(runButton, volumnSlider);
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().addAll(musicNameLabel, imageView);
     }
@@ -141,6 +150,7 @@ public class MainView extends Application {
                         mediaPlayer.seek(Duration.ZERO);
                         mediaPlayer.play();
                     });
+                    mediaPlayer.volumeProperty().bind(volumnSlider.valueProperty().divide(100));
                     mediaPlayer.play();
                     Platform.runLater(new Runnable() {
                         @Override
