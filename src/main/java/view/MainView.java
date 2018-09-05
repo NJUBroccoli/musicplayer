@@ -2,6 +2,10 @@ package view;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.embed.swt.FXCanvas;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -47,6 +51,7 @@ public class MainView extends Application {
     private VBox musicListVBox = new VBox();
     private Label musicListLabel = new Label("Music List");
     private ListView<MusicLabel> musicListView = new ListView<>();
+    private ChoiceBox<String> playModeChoice = new ChoiceBox<>();
 
     private File choosedFile;
     private MediaPlayer mediaPlayer;
@@ -54,6 +59,7 @@ public class MainView extends Application {
     private Music currentMusic;
     private Double currentTime = new Double(0);
     private Double totalTime = new Double(0);
+    private int playMode = LIST_LOOP;
 
     private static final String FONT_TYPE = "Times New Roman";
     private static final int SELF_LOOP = 1;
@@ -61,6 +67,7 @@ public class MainView extends Application {
     private static final int RANDOM_LOOP = 3;
 
     public void start(Stage primaryStage) throws Exception{
+        setChoiceBox(primaryStage);
         setLabel(primaryStage);
         setListView(primaryStage);
         setSlider(primaryStage);
@@ -77,6 +84,26 @@ public class MainView extends Application {
 
     public static void main(String[] args){
         launch(args);
+    }
+
+    private void setChoiceBox(Stage stage){
+        String selfLoopStr = "Self Loop";
+        String listLoopStr = "List Loop";
+        String randomLoopStr = "Random Loop";
+        playModeChoice.setItems(FXCollections.observableArrayList(selfLoopStr, listLoopStr, randomLoopStr));
+        playModeChoice.getSelectionModel().select(1);
+        playModeChoice.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                switch (newValue.intValue()){
+                    case SELF_LOOP: playMode = SELF_LOOP; break;
+                    case LIST_LOOP: playMode = LIST_LOOP; break;
+                    case RANDOM_LOOP: playMode = RANDOM_LOOP; break;
+                    default: break;
+                }
+            }
+        });
+        playModeChoice.setPrefWidth(90);
     }
 
     private void setListView(Stage stage){
@@ -118,8 +145,9 @@ public class MainView extends Application {
     private void setBox(Stage stage){
         controlPane.add(timeSlider, 0, 0);
         controlPane.add(timeLabel, 1, 0);
-        controlPane.add(runButton, 0, 1);
-        controlPane.add(volumnSlider, 1, 1);
+        controlPane.add(playModeChoice, 0, 1);
+        controlPane.add(runButton, 1, 1);
+        controlPane.add(volumnSlider, 2, 1);
         controlPane.setAlignment(Pos.CENTER);
         imageVBox.setAlignment(Pos.CENTER);
         imageVBox.getChildren().addAll(musicNameLabel, musicArtistLabel, imageView);
