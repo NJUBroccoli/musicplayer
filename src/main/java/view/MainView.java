@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -32,17 +33,21 @@ public class MainView extends Application {
 
     private MenuBar menuBar = new MenuBar();
     private Button runButton = new Button("START");
-    private HBox hBox = new HBox(15);
-    private VBox vBox = new VBox(5);
+    private GridPane controlPane = new GridPane();
+    private VBox imageVBox = new VBox(5);
     private BorderPane borderPane = new BorderPane();
     private ImageView imageView = new ImageView();
     private Label musicNameLabel = new Label("Please choose a song to play!");
     private Slider volumnSlider = new Slider();
+    private Slider timeSlider = new Slider();
+    private Label timeLabel = new Label();
 
     private File choosedFile;
     private MediaPlayer mediaPlayer;
     private MusicList musicList = new MusicList();
     private Music currentMusic;
+    private Double currentTime = new Double(0);
+    private Double totalTime = new Double(0);
 
     public void start(Stage primaryStage) throws Exception{
         setLabel(primaryStage);
@@ -67,6 +72,7 @@ public class MainView extends Application {
         volumnSlider.setValue(50);
         volumnSlider.setShowTickLabels(true);
         volumnSlider.setShowTickMarks(true);
+        timeSlider.setPrefWidth(400);
     }
 
     private void setLabel(Stage stage){
@@ -84,15 +90,18 @@ public class MainView extends Application {
 
     private void setPane(Stage stage){
         borderPane.setTop(menuBar);
-        borderPane.setCenter(vBox);
-        borderPane.setBottom(hBox);
+        borderPane.setCenter(imageVBox);
+        borderPane.setBottom(controlPane);
     }
 
     private void setBox(Stage stage){
-        hBox.setAlignment(Pos.CENTER);
-        hBox.getChildren().addAll(runButton, volumnSlider);
-        vBox.setAlignment(Pos.CENTER);
-        vBox.getChildren().addAll(musicNameLabel, imageView);
+        controlPane.add(timeSlider, 0, 0);
+        controlPane.add(timeLabel, 1, 0);
+        controlPane.add(runButton, 0, 1);
+        controlPane.add(volumnSlider, 1, 1);
+        controlPane.setAlignment(Pos.CENTER);
+        imageVBox.setAlignment(Pos.CENTER);
+        imageVBox.getChildren().addAll(musicNameLabel, imageView);
     }
 
     private void setButton(Stage stage){
@@ -145,10 +154,23 @@ public class MainView extends Application {
                     musicList.add(currentMusic);
                     Media media = new Media(new File(currentMusic.getFilename()).toURI().toString());
                     mediaPlayer = new MediaPlayer(media);
+                    mediaPlayer.setOnReady(() -> {
+                        totalTime = mediaPlayer.getStopTime().toSeconds();
+                    });
                     mediaPlayer.setOnEndOfMedia(() -> {
                         mediaPlayer.stop();
                         mediaPlayer.seek(Duration.ZERO);
                         mediaPlayer.play();
+                    });
+                    mediaPlayer.currentTimeProperty().addListener(ov->{
+                        currentTime = mediaPlayer.getCurrentTime().toSeconds();
+                        timeLabel.setText(secToStr(currentTime) + "/" + secToStr(totalTime));
+                        timeSlider.setValue(currentTime / totalTime * 100);
+                    });
+                    timeSlider.valueProperty().addListener(ov->{
+                        if (timeSlider.isValueChanging()){
+                            mediaPlayer.seek(mediaPlayer.getTotalDuration().multiply(timeSlider.getValue() / 100));
+                        }
                     });
                     mediaPlayer.volumeProperty().bind(volumnSlider.valueProperty().divide(100));
                     mediaPlayer.play();
@@ -191,5 +213,14 @@ public class MainView extends Application {
         if ("mp3".equals(fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase()))
             return true;
         return false;
+    }
+
+    private String secToStr(Double seconds){
+        Integer count = seconds.intValue();
+        Integer Hours = count / 3600;
+        count = count % 3600;
+        Integer Minutes = count /60;
+        count = count % 60;
+        return Hours.toString()+":"+Minutes.toString()+":"+count.toString();
     }
 }
