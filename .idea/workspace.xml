@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b1e317db-5a0f-4a03-89bf-86fb70cb6ca6" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/model/MusicLabel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/musicplayer/model/Music.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/musicplayer/model/Music.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$1$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$1$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$1$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/musicplayer/view/MainView$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/musicplayer/view/MainView.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/musicplayer/view/MainView.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/model/Music.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/Music.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/MusicList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/model/MusicList.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/view/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/view/MainView.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -16,27 +24,46 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="MainView.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="MainView.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/view/MainView.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="149" column="17" lean-forward="true" selection-start-line="149" selection-start-column="17" selection-end-line="149" selection-end-column="17" />
+            <state relative-caret-position="81">
+              <caret line="228" column="35" lean-forward="true" selection-start-line="228" selection-start-column="35" selection-end-line="228" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3934#3935#0" expanded="true" />
-                <element signature="e#4024#4025#0" expanded="true" />
-                <element signature="e#4290#4291#0" expanded="true" />
-                <element signature="e#4380#4381#0" expanded="true" />
+                <element signature="e#4738#4739#0" expanded="true" />
+                <element signature="e#4828#4829#0" expanded="true" />
+                <element signature="e#5094#5095#0" expanded="true" />
+                <element signature="e#5184#5185#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MusicList.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MusicLabel.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/model/MusicLabel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="12" column="13" lean-forward="true" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+              <folding>
+                <element signature="e#115#116#0" expanded="true" />
+                <element signature="e#138#139#0" expanded="true" />
+                <element signature="e#174#175#0" expanded="true" />
+                <element signature="e#201#202#0" expanded="true" />
+                <element signature="e#265#266#0" expanded="true" />
+                <element signature="e#299#300#0" expanded="true" />
+                <element signature="e#328#329#0" expanded="true" />
+                <element signature="e#355#356#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MusicList.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/model/MusicList.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="178">
-              <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+            <state relative-caret-position="-9">
+              <caret line="35" column="34" selection-start-line="35" selection-start-column="34" selection-end-line="35" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -47,14 +74,16 @@
       <file leaf-file-name="Music.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/model/Music.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
-              <caret line="40" column="19" selection-start-line="40" selection-start-column="19" selection-end-line="40" selection-end-column="19" />
+            <state>
+              <caret line="60" column="1" selection-start-line="60" selection-start-column="1" selection-end-line="60" selection-end-column="1" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4291#4292#0" expanded="true" />
                 <element signature="e#4320#4321#0" expanded="true" />
                 <element signature="e#4299#4300#0" expanded="true" />
                 <element signature="e#4336#4337#0" expanded="true" />
+                <element signature="e#4410#4411#0" expanded="true" />
+                <element signature="e#4448#4449#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -78,6 +107,11 @@
       </list>
     </option>
   </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>currentMusic</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -86,9 +120,10 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/debug/PrintMessage.java" />
         <option value="$PROJECT_DIR$/src/main/java/service/MusicPlay.java" />
-        <option value="$PROJECT_DIR$/src/main/java/view/MainView.java" />
-        <option value="$PROJECT_DIR$/src/main/java/model/Music.java" />
         <option value="$PROJECT_DIR$/src/main/java/model/MusicList.java" />
+        <option value="$PROJECT_DIR$/src/main/java/model/Music.java" />
+        <option value="$PROJECT_DIR$/src/main/java/model/MusicLabel.java" />
+        <option value="$PROJECT_DIR$/src/main/java/view/MainView.java" />
       </list>
     </option>
   </component>
@@ -308,10 +343,10 @@
           <caret line="28" column="11" lean-forward="true" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3934#3935#0" expanded="true" />
-            <element signature="e#4024#4025#0" expanded="true" />
-            <element signature="e#4290#4291#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
+            <element signature="e#4738#4739#0" expanded="true" />
+            <element signature="e#4828#4829#0" expanded="true" />
+            <element signature="e#5094#5095#0" expanded="true" />
+            <element signature="e#5184#5185#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -336,6 +371,8 @@
             <element signature="e#4320#4321#0" expanded="true" />
             <element signature="e#4299#4300#0" expanded="true" />
             <element signature="e#4336#4337#0" expanded="true" />
+            <element signature="e#4410#4411#0" expanded="true" />
+            <element signature="e#4448#4449#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -353,10 +390,10 @@
           <caret line="115" column="23" selection-start-line="115" selection-start-column="23" selection-end-line="115" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3934#3935#0" expanded="true" />
-            <element signature="e#4024#4025#0" expanded="true" />
-            <element signature="e#4290#4291#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
+            <element signature="e#4738#4739#0" expanded="true" />
+            <element signature="e#4828#4829#0" expanded="true" />
+            <element signature="e#5094#5095#0" expanded="true" />
+            <element signature="e#5184#5185#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -371,6 +408,8 @@
             <element signature="e#4320#4321#0" expanded="true" />
             <element signature="e#4299#4300#0" expanded="true" />
             <element signature="e#4336#4337#0" expanded="true" />
+            <element signature="e#4410#4411#0" expanded="true" />
+            <element signature="e#4448#4449#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -398,10 +437,10 @@
           <caret line="82" column="37" lean-forward="true" selection-start-line="82" selection-start-column="37" selection-end-line="82" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3934#3935#0" expanded="true" />
-            <element signature="e#4024#4025#0" expanded="true" />
-            <element signature="e#4290#4291#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
+            <element signature="e#4738#4739#0" expanded="true" />
+            <element signature="e#4828#4829#0" expanded="true" />
+            <element signature="e#5094#5095#0" expanded="true" />
+            <element signature="e#5184#5185#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -426,6 +465,8 @@
             <element signature="e#4320#4321#0" expanded="true" />
             <element signature="e#4299#4300#0" expanded="true" />
             <element signature="e#4336#4337#0" expanded="true" />
+            <element signature="e#4410#4411#0" expanded="true" />
+            <element signature="e#4448#4449#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -444,10 +485,10 @@
           <caret line="40" column="64" selection-start-line="40" selection-start-column="64" selection-end-line="40" selection-end-column="64" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3934#3935#0" expanded="true" />
-            <element signature="e#4024#4025#0" expanded="true" />
-            <element signature="e#4290#4291#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
+            <element signature="e#4738#4739#0" expanded="true" />
+            <element signature="e#4828#4829#0" expanded="true" />
+            <element signature="e#5094#5095#0" expanded="true" />
+            <element signature="e#5184#5185#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -459,18 +500,11 @@
           <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3934#3935#0" expanded="true" />
-            <element signature="e#4024#4025#0" expanded="true" />
-            <element signature="e#4290#4291#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
+            <element signature="e#4738#4739#0" expanded="true" />
+            <element signature="e#4828#4829#0" expanded="true" />
+            <element signature="e#5094#5095#0" expanded="true" />
+            <element signature="e#5184#5185#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/javafx-src.zip!/javafx/scene/media/Media.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="376" column="11" selection-start-line="376" selection-start-column="11" selection-end-line="376" selection-end-column="11" />
         </state>
       </provider>
     </entry>
@@ -572,10 +606,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/lang/Runnable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="55" column="17" selection-start-line="55" selection-start-column="17" selection-end-line="55" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/MusicList.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-9">
+          <caret line="35" column="34" selection-start-line="35" selection-start-column="34" selection-end-line="35" selection-end-column="34" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/MusicLabel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="12" column="13" lean-forward="true" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <folding>
+            <element signature="e#115#116#0" expanded="true" />
+            <element signature="e#138#139#0" expanded="true" />
+            <element signature="e#174#175#0" expanded="true" />
+            <element signature="e#201#202#0" expanded="true" />
+            <element signature="e#265#266#0" expanded="true" />
+            <element signature="e#299#300#0" expanded="true" />
+            <element signature="e#328#329#0" expanded="true" />
+            <element signature="e#355#356#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/model/Music.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="60" column="1" selection-start-line="60" selection-start-column="1" selection-end-line="60" selection-end-column="1" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4291#4292#0" expanded="true" />
+            <element signature="e#4320#4321#0" expanded="true" />
+            <element signature="e#4299#4300#0" expanded="true" />
+            <element signature="e#4336#4337#0" expanded="true" />
+            <element signature="e#4410#4411#0" expanded="true" />
+            <element signature="e#4448#4449#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/javafx-src.zip!/javafx/scene/media/MediaPlayer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="1901" column="22" selection-start-line="1901" selection-start-column="22" selection-end-line="1901" selection-end-column="22" />
+        <state relative-caret-position="31">
+          <caret line="393" column="11" selection-start-line="393" selection-start-column="11" selection-end-line="393" selection-end-column="11" />
           <folding>
             <element signature="e#59465#59466#0" expanded="true" />
             <element signature="e#59512#59513#0" expanded="true" />
@@ -585,47 +669,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/src.zip!/java/lang/Runnable.java">
+    <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_144.jdk/Contents/Home/javafx-src.zip!/javafx/scene/media/Media.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="129">
-          <caret line="55" column="17" selection-start-line="55" selection-start-column="17" selection-end-line="55" selection-end-column="17" />
+        <state relative-caret-position="195">
+          <caret line="376" column="11" selection-start-line="376" selection-start-column="11" selection-end-line="376" selection-end-column="11" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/view/MainView.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="149" column="17" lean-forward="true" selection-start-line="149" selection-start-column="17" selection-end-line="149" selection-end-column="17" />
+        <state relative-caret-position="81">
+          <caret line="228" column="35" lean-forward="true" selection-start-line="228" selection-start-column="35" selection-end-line="228" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3934#3935#0" expanded="true" />
-            <element signature="e#4024#4025#0" expanded="true" />
-            <element signature="e#4290#4291#0" expanded="true" />
-            <element signature="e#4380#4381#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/Music.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="40" column="19" selection-start-line="40" selection-start-column="19" selection-end-line="40" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4291#4292#0" expanded="true" />
-            <element signature="e#4320#4321#0" expanded="true" />
-            <element signature="e#4299#4300#0" expanded="true" />
-            <element signature="e#4336#4337#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/model/MusicList.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="178">
-          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#4738#4739#0" expanded="true" />
+            <element signature="e#4828#4829#0" expanded="true" />
+            <element signature="e#5094#5095#0" expanded="true" />
+            <element signature="e#5184#5185#0" expanded="true" />
           </folding>
         </state>
       </provider>

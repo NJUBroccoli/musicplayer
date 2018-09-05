@@ -123,4 +123,8 @@ public class Music extends Mp3File{
         return albumImageData;
     }
 
+    public long getLengthInSeconds(){
+        return lengthInSeconds;
+    }
+
 }

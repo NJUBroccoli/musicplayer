@@ -23,6 +23,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.Music;
+import model.MusicLabel;
 import model.MusicList;
 
 import java.io.ByteArrayInputStream;
@@ -34,13 +35,17 @@ public class MainView extends Application {
     private MenuBar menuBar = new MenuBar();
     private Button runButton = new Button("START");
     private GridPane controlPane = new GridPane();
-    private VBox imageVBox = new VBox(5);
+    private VBox imageVBox = new VBox();
     private BorderPane borderPane = new BorderPane();
     private ImageView imageView = new ImageView();
     private Label musicNameLabel = new Label("Please choose a song to play!");
+    private Label musicArtistLabel = new Label();
     private Slider volumnSlider = new Slider();
     private Slider timeSlider = new Slider();
     private Label timeLabel = new Label();
+    private VBox musicListVBox = new VBox();
+    private Label musicListLabel = new Label("Music List");
+    private ListView<Label> musicListView = new ListView<>();
 
     private File choosedFile;
     private MediaPlayer mediaPlayer;
@@ -49,8 +54,11 @@ public class MainView extends Application {
     private Double currentTime = new Double(0);
     private Double totalTime = new Double(0);
 
+    private static final String FONTTYPE = "Times New Roman";
+
     public void start(Stage primaryStage) throws Exception{
         setLabel(primaryStage);
+        setListView(primaryStage);
         setSlider(primaryStage);
         setImage(primaryStage);
         setMenu(primaryStage);
@@ -67,6 +75,11 @@ public class MainView extends Application {
         launch(args);
     }
 
+    private void setListView(Stage stage){
+        musicListView.setEditable(false);
+        musicListView.setPrefWidth(150);
+    }
+
     private void setSlider(Stage stage){
         volumnSlider.setPrefWidth(100);
         volumnSlider.setValue(50);
@@ -76,7 +89,10 @@ public class MainView extends Application {
     }
 
     private void setLabel(Stage stage){
-        musicNameLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 20));
+        musicNameLabel.setFont(Font.font(FONTTYPE, FontWeight.BOLD, FontPosture.REGULAR, 25));
+        musicNameLabel.setAlignment(Pos.CENTER);
+        musicListLabel.setFont(Font.font(FONTTYPE, FontWeight.LIGHT, FontPosture.REGULAR, 15));
+        musicListLabel.setAlignment(Pos.CENTER);
     }
 
     private void setImage(Stage stage){
@@ -92,6 +108,7 @@ public class MainView extends Application {
         borderPane.setTop(menuBar);
         borderPane.setCenter(imageVBox);
         borderPane.setBottom(controlPane);
+        borderPane.setLeft(musicListVBox);
     }
 
     private void setBox(Stage stage){
@@ -101,7 +118,9 @@ public class MainView extends Application {
         controlPane.add(volumnSlider, 1, 1);
         controlPane.setAlignment(Pos.CENTER);
         imageVBox.setAlignment(Pos.CENTER);
-        imageVBox.getChildren().addAll(musicNameLabel, imageView);
+        imageVBox.getChildren().addAll(musicNameLabel, musicArtistLabel, imageView);
+        musicListVBox.getChildren().addAll(musicListLabel, musicListView);
+        musicListVBox.setAlignment(Pos.CENTER);
     }
 
     private void setButton(Stage stage){
@@ -144,7 +163,10 @@ public class MainView extends Application {
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MP3 Music", "*.mp3"));
                 choosedFile = fileChooser.showOpenDialog(stage);
-                if (choosedFile != null && !validFileType(choosedFile)){
+                if (choosedFile == null){
+                    return;
+                }
+                if (!validFileType(choosedFile)){
                     System.out.println("Invalid file type: only .mp3 are allowed.");
                     return;
                 }
@@ -153,33 +175,12 @@ public class MainView extends Application {
                         mediaPlayer.stop();
                     currentMusic = new Music(choosedFile.getPath());
                     musicList.add(currentMusic);
-                    Media media = new Media(new File(currentMusic.getFilename()).toURI().toString());
-                    mediaPlayer = new MediaPlayer(media);
-                    mediaPlayer.setOnReady(() -> {
-                        totalTime = mediaPlayer.getStopTime().toSeconds();
-                    });
-                    mediaPlayer.setOnEndOfMedia(() -> {
-                        mediaPlayer.stop();
-                        mediaPlayer.seek(Duration.ZERO);
-                        mediaPlayer.play();
-                    });
-                    mediaPlayer.currentTimeProperty().addListener(ov->{
-                        currentTime = mediaPlayer.getCurrentTime().toSeconds();
-                        timeLabel.setText(secToStr(currentTime) + "/" + secToStr(totalTime));
-                        timeSlider.setValue(currentTime / totalTime * 100);
-                    });
-                    timeSlider.valueProperty().addListener(ov->{
-                        if (timeSlider.isValueChanging()){
-                            mediaPlayer.seek(mediaPlayer.getTotalDuration().multiply(timeSlider.getValue() / 100));
-                        }
-                    });
-                    mediaPlayer.volumeProperty().bind(volumnSlider.valueProperty().divide(100));
-                    mediaPlayer.play();
+                    updateMediaPlayer();
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             runButton.setText("PAUSE");
-                            updateUI(currentMusic);
+                            updateUI(currentMusic, true);
                         }
                     });
                 }catch (Exception e){
@@ -191,13 +192,67 @@ public class MainView extends Application {
         menuBar.getMenus().add(fileMenu);
     }
 
-    private void updateUI(Music music){
+    private void updateMediaPlayer(){
+        Media media = new Media(new File(currentMusic.getFilename()).toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setOnReady(() -> {
+            totalTime = mediaPlayer.getStopTime().toSeconds();
+        });
+        mediaPlayer.setOnEndOfMedia(() -> {
+            mediaPlayer.stop();
+            mediaPlayer.seek(Duration.ZERO);
+            mediaPlayer.play();
+        });
+        mediaPlayer.currentTimeProperty().addListener(ov->{
+            currentTime = mediaPlayer.getCurrentTime().toSeconds();
+            timeLabel.setText(secToStr(currentTime) + "/" + secToStr(totalTime));
+            timeSlider.setValue(currentTime / totalTime * 100);
+        });
+        timeSlider.valueProperty().addListener(ov->{
+            if (timeSlider.isValueChanging()){
+                mediaPlayer.seek(mediaPlayer.getTotalDuration().multiply(timeSlider.getValue() / 100));
+            }
+        });
+        mediaPlayer.volumeProperty().bind(volumnSlider.valueProperty().divide(100));
+        mediaPlayer.play();
+    }
+
+    private void updateUI(Music music, boolean addNewMusic){
         updateImage(music);
         updateLabel(music);
+        if (addNewMusic)
+            updateMusicList(music);
+    }
+
+    private void updateMusicList(Music music){
+        MusicLabel musicLabel = new MusicLabel();
+        musicLabel.setFont(Font.font(FONTTYPE, FontWeight.LIGHT, FontPosture.REGULAR, 13));
+        musicLabel.setText(music.getTitle() + "---" + music.getArtist());
+        musicLabel.setMusic(music);
+        musicLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getClickCount() > 1){
+                    if (currentMusic != null)
+                        mediaPlayer.stop();
+                    currentMusic = ((MusicLabel)event.getSource()).getMusic();
+                    updateMediaPlayer();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            runButton.setText("PAUSE");
+                            updateUI(currentMusic, false);
+                        }
+                    });
+                }
+            }
+        });
+        musicListView.getItems().addAll(musicLabel);
     }
 
     private void updateLabel(Music music){
-        musicNameLabel.setText(music.getTitle() + "\n Artist: " + music.getArtist());
+        musicNameLabel.setText(music.getTitle());
+        musicArtistLabel.setText(music.getArtist());
     }
 
     private void updateImage(Music music){
