@@ -116,4 +116,8 @@ public class Music extends Mp3File{
         return title;
     }
 
+    public byte[] getAlbumImageData(){
+        return albumImageData;
+    }
+
 }

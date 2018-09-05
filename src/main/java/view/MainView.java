@@ -4,13 +4,14 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -19,6 +20,7 @@ import javafx.util.Duration;
 import model.Music;
 import model.MusicList;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 
 
@@ -26,19 +28,22 @@ public class MainView extends Application {
 
     private MenuBar menuBar = new MenuBar();
     private Button runButton = new Button("START");
-    private Button pauseButton = new Button("PAUSE");
+    private HBox hBox = new HBox(15);
+    private BorderPane borderPane = new BorderPane();
+    private ImageView imageView = new ImageView();
 
     private File choosedFile;
     private MediaPlayer mediaPlayer;
     private MusicList musicList = new MusicList();
     private Music currentMusic;
-    Double slTime ;
 
     public void start(Stage primaryStage) throws Exception{
+        setImage(primaryStage);
         setMenu(primaryStage);
         setButton(primaryStage);
-        Group root = new Group(menuBar, runButton, pauseButton);
-        Scene scene = new Scene(root, 600, 300);
+        setBox(primaryStage);
+        setPane(primaryStage);
+        Scene scene = new Scene(borderPane, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("musicplayer");
         primaryStage.show();
@@ -48,46 +53,52 @@ public class MainView extends Application {
         launch(args);
     }
 
+    private void setImage(Stage stage){
+        File defaultImageFile = new File("out/production/musicplayer/default_image.jpg");
+        String url = defaultImageFile.toURI().toString();
+        imageView.setImage(new Image(url));
+        imageView.setFitWidth(400);
+        imageView.setFitHeight(400);
+        imageView.setCache(true);
+    }
+
+    private void setPane(Stage stage){
+        borderPane.setTop(menuBar);
+        borderPane.setCenter(imageView);
+        borderPane.setBottom(hBox);
+    }
+
+    private void setBox(Stage stage){
+        hBox.setAlignment(Pos.CENTER);
+        hBox.getChildren().addAll(runButton);
+    }
+
     private void setButton(Stage stage){
-        runButton.setLayoutX(250);
-        runButton.setLayoutY(250);
-        pauseButton.setLayoutX(350);
-        pauseButton.setLayoutY(250);
-        runButton.setVisible(true);
-        pauseButton.setVisible(false);
         runButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (currentMusic != null){
-                    mediaPlayer.play();
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            switchRunButton();
-                        }
-                    });
-                }
-                else{
-                    System.out.println("There is no music you can play");
-                }
-            }
-        });
-        pauseButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (currentMusic != null){
-                    if (mediaPlayer != null) {
+                    if (runButton.getText().equals("START")) {
+                        mediaPlayer.play();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                runButton.setText("PAUSE");
+                            }
+                        });
+                    }
+                    else{
                         mediaPlayer.pause();
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                switchRunButton();
+                                runButton.setText("START");
                             }
                         });
                     }
                 }
                 else{
-                    System.out.println("There is no music you can pause");
+                    System.out.println("There is no music you can play");
                 }
             }
         });
@@ -106,6 +117,8 @@ public class MainView extends Application {
                     return;
                 }
                 try {
+                    if (currentMusic != null)
+                        mediaPlayer.stop();
                     currentMusic = new Music(choosedFile.getPath());
                     musicList.add(currentMusic);
                     Media media = new Media(new File(currentMusic.getFilename()).toURI().toString());
@@ -113,12 +126,14 @@ public class MainView extends Application {
                     mediaPlayer.setOnEndOfMedia(() -> {
                         mediaPlayer.stop();
                         mediaPlayer.seek(Duration.ZERO);
+                        mediaPlayer.play();
                     });
                     mediaPlayer.play();
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            switchRunButton();
+                            runButton.setText("PAUSE");
+                            updateImage(currentMusic);
                         }
                     });
                 }catch (Exception e){
@@ -130,14 +145,17 @@ public class MainView extends Application {
         menuBar.getMenus().add(fileMenu);
     }
 
-    private void switchRunButton(){
-        if (runButton.isVisible()){
-            runButton.setVisible(false);
-            pauseButton.setVisible(true);
-        }
-        else{
-            pauseButton.setVisible(false);
-            runButton.setVisible(true);
+    private void updateImage(Music music){
+        try{
+            Image img = new Image(new ByteArrayInputStream(music.getAlbumImageData()));
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    imageView.setImage(img);
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
