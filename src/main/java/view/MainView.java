@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -45,7 +46,7 @@ public class MainView extends Application {
     private Label timeLabel = new Label();
     private VBox musicListVBox = new VBox();
     private Label musicListLabel = new Label("Music List");
-    private ListView<Label> musicListView = new ListView<>();
+    private ListView<MusicLabel> musicListView = new ListView<>();
 
     private File choosedFile;
     private MediaPlayer mediaPlayer;
@@ -54,7 +55,10 @@ public class MainView extends Application {
     private Double currentTime = new Double(0);
     private Double totalTime = new Double(0);
 
-    private static final String FONTTYPE = "Times New Roman";
+    private static final String FONT_TYPE = "Times New Roman";
+    private static final int SELF_LOOP = 1;
+    private static final int LIST_LOOP = 2;
+    private static final int RANDOM_LOOP = 3;
 
     public void start(Stage primaryStage) throws Exception{
         setLabel(primaryStage);
@@ -89,9 +93,9 @@ public class MainView extends Application {
     }
 
     private void setLabel(Stage stage){
-        musicNameLabel.setFont(Font.font(FONTTYPE, FontWeight.BOLD, FontPosture.REGULAR, 25));
+        musicNameLabel.setFont(Font.font(FONT_TYPE, FontWeight.BOLD, FontPosture.REGULAR, 25));
         musicNameLabel.setAlignment(Pos.CENTER);
-        musicListLabel.setFont(Font.font(FONTTYPE, FontWeight.LIGHT, FontPosture.REGULAR, 15));
+        musicListLabel.setFont(Font.font(FONT_TYPE, FontWeight.LIGHT, FontPosture.REGULAR, 15));
         musicListLabel.setAlignment(Pos.CENTER);
     }
 
@@ -221,33 +225,44 @@ public class MainView extends Application {
         updateImage(music);
         updateLabel(music);
         if (addNewMusic)
-            updateMusicList(music);
+            updateMusicList(music, true);
     }
 
-    private void updateMusicList(Music music){
-        MusicLabel musicLabel = new MusicLabel();
-        musicLabel.setFont(Font.font(FONTTYPE, FontWeight.LIGHT, FontPosture.REGULAR, 13));
-        musicLabel.setText(music.getTitle() + "---" + music.getArtist());
-        musicLabel.setMusic(music);
-        musicLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.getClickCount() > 1){
-                    if (currentMusic != null)
-                        mediaPlayer.stop();
-                    currentMusic = ((MusicLabel)event.getSource()).getMusic();
-                    updateMediaPlayer();
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            runButton.setText("PAUSE");
-                            updateUI(currentMusic, false);
-                        }
-                    });
+    private void updateMusicList(Music music, boolean addNewMusicLabel){
+        if (addNewMusicLabel) {
+            MusicLabel musicLabel = new MusicLabel();
+            musicLabel.setFont(Font.font(FONT_TYPE, FontWeight.LIGHT, FontPosture.REGULAR, 13));
+            musicLabel.setText(music.getTitle() + "---" + music.getArtist());
+            musicLabel.setMusic(music);
+            musicLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (event.getClickCount() > 1) {
+                        if (currentMusic != null)
+                            mediaPlayer.stop();
+                        currentMusic = ((MusicLabel) event.getSource()).getMusic();
+                        updateMediaPlayer();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                runButton.setText("PAUSE");
+                                updateUI(currentMusic, false);
+                            }
+                        });
+                    }
                 }
+            });
+            musicListView.getItems().addAll(musicLabel);
+        }
+        if (currentMusic != null){
+            for (MusicLabel ml : musicListView.getItems()){
+                if (ml.getMusic() == currentMusic) {
+                    ml.setTextFill(Color.BLUE);
+                }
+                else
+                    ml.setTextFill(Color.BLACK);
             }
-        });
-        musicListView.getItems().addAll(musicLabel);
+        }
     }
 
     private void updateLabel(Music music){
