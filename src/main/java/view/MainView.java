@@ -12,8 +12,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -29,8 +33,10 @@ public class MainView extends Application {
     private MenuBar menuBar = new MenuBar();
     private Button runButton = new Button("START");
     private HBox hBox = new HBox(15);
+    private VBox vBox = new VBox(5);
     private BorderPane borderPane = new BorderPane();
     private ImageView imageView = new ImageView();
+    private Label musicNameLabel = new Label("Please choose a song to play!");
 
     private File choosedFile;
     private MediaPlayer mediaPlayer;
@@ -38,6 +44,7 @@ public class MainView extends Application {
     private Music currentMusic;
 
     public void start(Stage primaryStage) throws Exception{
+        setLabel(primaryStage);
         setImage(primaryStage);
         setMenu(primaryStage);
         setButton(primaryStage);
@@ -53,6 +60,10 @@ public class MainView extends Application {
         launch(args);
     }
 
+    private void setLabel(Stage stage){
+        musicNameLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, FontPosture.REGULAR, 20));
+    }
+
     private void setImage(Stage stage){
         File defaultImageFile = new File("out/production/musicplayer/default_image.jpg");
         String url = defaultImageFile.toURI().toString();
@@ -64,13 +75,15 @@ public class MainView extends Application {
 
     private void setPane(Stage stage){
         borderPane.setTop(menuBar);
-        borderPane.setCenter(imageView);
+        borderPane.setCenter(vBox);
         borderPane.setBottom(hBox);
     }
 
     private void setBox(Stage stage){
         hBox.setAlignment(Pos.CENTER);
         hBox.getChildren().addAll(runButton);
+        vBox.setAlignment(Pos.CENTER);
+        vBox.getChildren().addAll(musicNameLabel, imageView);
     }
 
     private void setButton(Stage stage){
@@ -133,7 +146,7 @@ public class MainView extends Application {
                         @Override
                         public void run() {
                             runButton.setText("PAUSE");
-                            updateImage(currentMusic);
+                            updateUI(currentMusic);
                         }
                     });
                 }catch (Exception e){
@@ -145,15 +158,19 @@ public class MainView extends Application {
         menuBar.getMenus().add(fileMenu);
     }
 
+    private void updateUI(Music music){
+        updateImage(music);
+        updateLabel(music);
+    }
+
+    private void updateLabel(Music music){
+        musicNameLabel.setText(music.getTitle() + "\n Artist: " + music.getArtist());
+    }
+
     private void updateImage(Music music){
         try{
             Image img = new Image(new ByteArrayInputStream(music.getAlbumImageData()));
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    imageView.setImage(img);
-                }
-            });
+            imageView.setImage(img);
         }catch (Exception e){
             e.printStackTrace();
         }

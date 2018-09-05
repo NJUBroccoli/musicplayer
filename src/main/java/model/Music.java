@@ -116,6 +116,10 @@ public class Music extends Mp3File{
         return title;
     }
 
+    public String getArtist(){
+        return artist;
+    }
+
     public byte[] getAlbumImageData(){
         return albumImageData;
     }
