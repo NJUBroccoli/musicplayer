@@ -37,30 +37,31 @@ import java.util.Iterator;
 
 public class MainView extends Application {
 
-    private MenuBar menuBar = new MenuBar();
-    private Button runButton = new Button("START");
-    private GridPane controlPane = new GridPane();
-    private VBox imageVBox = new VBox();
-    private BorderPane borderPane = new BorderPane();
-    private ImageView imageView = new ImageView();
-    private Label musicNameLabel = new Label("Please choose a song to play!");
-    private Label musicArtistLabel = new Label();
-    private Slider volumnSlider = new Slider();
-    private Slider timeSlider = new Slider();
-    private Label timeLabel = new Label();
-    private VBox musicListVBox = new VBox();
-    private Label musicListLabel = new Label("Music List");
-    private ListView<MusicLabel> musicListView = new ListView<>();
-    private ChoiceBox<String> playModeChoice = new ChoiceBox<>();
+    private static MenuBar menuBar = new MenuBar();
+    private static Button runButton = new Button("START");
+    private static GridPane controlPane = new GridPane();
+    private static VBox imageVBox = new VBox();
+    private static BorderPane borderPane = new BorderPane();
+    private static ImageView imageView = new ImageView();
+    private static Label musicNameLabel = new Label("Please choose a song to play!");
+    private static Label musicArtistLabel = new Label();
 
-    private File choosedFile;
-    private MediaPlayer mediaPlayer;
-    private MusicList musicList = new MusicList();
-    private Music currentMusic;
-    private Double currentTime = new Double(0);
-    private Double totalTime = new Double(0);
-    private int playMode = GP.SELF_LOOP;
-    private boolean firstTouchEnd = true;
+    public static Slider volumnSlider = new Slider();
+    public static Slider timeSlider = new Slider();
+    public static Label timeLabel = new Label();
+
+    private static VBox musicListVBox = new VBox();
+    private static Label musicListLabel = new Label("Music List");
+    private static ListView<MusicLabel> musicListView = new ListView<>();
+    private static ChoiceBox<String> playModeChoice = new ChoiceBox<>();
+
+    private static File choosedFile;
+//    private MediaPlayer mediaPlayer;
+    public static MusicList musicList = new MusicList();
+    public static Music currentMusic;
+    public static Double currentTime = new Double(0);
+    public static Double totalTime = new Double(0);
+    public static int playMode = GP.SELF_LOOP;
 
     public void start(Stage primaryStage) throws Exception{
         setChoiceBox(primaryStage);
@@ -157,7 +158,7 @@ public class MainView extends Application {
             public void handle(MouseEvent event) {
                 if (currentMusic != null){
                     if (runButton.getText().equals("START")) {
-                        mediaPlayer.play();
+                        currentMusic.play();
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -166,7 +167,7 @@ public class MainView extends Application {
                         });
                     }
                     else{
-                        mediaPlayer.pause();
+                        currentMusic.pause();
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -200,10 +201,9 @@ public class MainView extends Application {
                 }
                 try {
                     if (currentMusic != null)
-                        mediaPlayer.stop();
+                        currentMusic.stop();
                     currentMusic = new Music(choosedFile.getPath());
                     musicList.add(currentMusic);
-                    updateMediaPlayer();
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -220,57 +220,18 @@ public class MainView extends Application {
         menuBar.getMenus().add(fileMenu);
     }
 
-    private void updateMediaPlayer(){
-        Media media = new Media(new File(currentMusic.getFilename()).toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.seek(Duration.ZERO);
-        mediaPlayer.setOnReady(() -> {
-            totalTime = mediaPlayer.getStopTime().toSeconds();
-        });
-        mediaPlayer.setOnEndOfMedia(() -> {
-            switch (playMode){
-                case GP.SELF_LOOP:
-                    mediaPlayer.stop();
-                    mediaPlayer.seek(Duration.ZERO);
-                    mediaPlayer.play();
-                    break;
-                case GP.LIST_LOOP:
-                case GP.RANDOM_LOOP:
-                    currentMusic = musicList.getNextMusic(currentMusic, playMode);
-                    System.out.println("Switch to " + currentMusic.getTitle());
-                    updateMediaPlayer();
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            runButton.setText("PAUSE");
-                            updateUI(currentMusic, false);
-                        }
-                    });
-                    break;
-            }
-        });
-        mediaPlayer.currentTimeProperty().addListener(ov->{
-            currentTime = mediaPlayer.getCurrentTime().toSeconds();
-            timeLabel.setText(secToStr(currentTime) + "/" + secToStr(totalTime));
-            timeSlider.setValue(currentTime / totalTime * 100);
-        });
-        timeSlider.valueProperty().addListener(ov->{
-            if (timeSlider.isValueChanging()){
-                mediaPlayer.seek(mediaPlayer.getTotalDuration().multiply(timeSlider.getValue() / 100));
-            }
-        });
-        mediaPlayer.volumeProperty().bind(volumnSlider.valueProperty().divide(100));
-        mediaPlayer.play();
-    }
-
-    private void updateUI(Music music, boolean addNewMusic){
+    public static void updateUI(Music music, boolean addNewMusic){
+        updateButtion();
         updateImage(music);
         updateLabel(music);
-        if (addNewMusic)
-            updateMusicList(music, true);
+        updateMusicList(music, addNewMusic);
     }
 
-    private void updateMusicList(Music music, boolean addNewMusicLabel){
+    private static void updateButtion(){
+        runButton.setText("PAUSE");
+    }
+
+    private static void updateMusicList(Music music, boolean addNewMusicLabel){
         if (addNewMusicLabel) {
             MusicLabel musicLabel = new MusicLabel();
             musicLabel.setFont(Font.font(GP.ENG_FONT_TYPE, FontWeight.LIGHT, FontPosture.REGULAR, 13));
@@ -281,10 +242,10 @@ public class MainView extends Application {
                 public void handle(MouseEvent event) {
                     if (event.getClickCount() > 1) {
                         if (currentMusic != null)
-                            mediaPlayer.stop();
+                            currentMusic.stop();
                         currentMusic = ((MusicLabel) event.getSource()).getMusic();
-                        mediaPlayer.seek(Duration.ZERO);
-                        updateMediaPlayer();
+                        currentMusic.seek(Duration.ZERO);
+                        currentMusic.play();
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -308,12 +269,12 @@ public class MainView extends Application {
         }
     }
 
-    private void updateLabel(Music music){
+    private static void updateLabel(Music music){
         musicNameLabel.setText(music.getTitle());
         musicArtistLabel.setText(music.getArtist());
     }
 
-    private void updateImage(Music music){
+    private static void updateImage(Music music){
         try{
             Image img = new Image(new ByteArrayInputStream(music.getAlbumImageData()));
             imageView.setImage(img);
@@ -329,7 +290,7 @@ public class MainView extends Application {
         return false;
     }
 
-    private String secToStr(Double seconds){
+    public static String secToStr(Double seconds){
         Integer count = seconds.intValue();
         Integer Hours = count / 3600;
         count = count % 3600;

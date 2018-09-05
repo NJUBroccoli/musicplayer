@@ -8,6 +8,7 @@ import java.util.Vector;
 
 public class MusicList {
     private Vector<Music> musics = new Vector<Music>();
+    private Random random = new Random();
     public MusicList(Music ... musics){
         int musicsLength = musics.length;
         for (int i = 0; i < musicsLength; i++)
@@ -62,7 +63,6 @@ public class MusicList {
             }
         }
         else if (playMode == GP.RANDOM_LOOP){
-            Random random = new Random();
             int musicNum = musics.size();
             int nextIndex = random.nextInt(musicNum);
             return musics.elementAt(nextIndex);

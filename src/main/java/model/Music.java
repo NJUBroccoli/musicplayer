@@ -1,7 +1,14 @@
 package model;
 
 import com.mpatric.mp3agic.*;
+import javafx.application.Platform;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
+import service.GP;
+import view.MainView;
 
+import java.io.File;
 import java.io.IOException;
 
 public class Music extends Mp3File{
@@ -26,6 +33,7 @@ public class Music extends Mp3File{
     private String url;
     private String encoder;
     private byte[] albumImageData;
+    private MediaPlayer player;
 
     public Music(){
         super();
@@ -39,6 +47,63 @@ public class Music extends Mp3File{
         else
             ID3V = 0;
         fillData();
+        createMediaPlayer();
+    }
+
+    private void createMediaPlayer(){
+        player = new MediaPlayer(new Media(new File(this.getFilename()).toURI().toString()));
+        player.setOnReady(() -> {
+            MainView.totalTime = player.getStopTime().toSeconds();
+        });
+        player.setOnEndOfMedia(() -> {
+            switch (MainView.playMode){
+                case GP.SELF_LOOP:
+                    player.stop();
+                    player.seek(Duration.ZERO);
+                    player.play();
+                    break;
+                case GP.LIST_LOOP:
+                case GP.RANDOM_LOOP:
+                    player.stop();
+                    player.seek(Duration.ZERO);
+                    MainView.currentMusic = MainView.musicList.getNextMusic(MainView.currentMusic, MainView.playMode);
+                    MainView.currentMusic.stop();
+                    MainView.currentMusic.seek(Duration.ZERO);
+                    MainView.currentMusic.play();
+                    Platform.runLater(() -> {
+                        MainView.updateUI(MainView.currentMusic, false);
+                    });
+                    break;
+            }
+        });
+        player.currentTimeProperty().addListener(ov->{
+            MainView.currentTime = player.getCurrentTime().toSeconds();
+            MainView.timeLabel.setText(MainView.secToStr(MainView.currentTime) + "/" + MainView.secToStr(MainView.totalTime));
+            MainView.timeSlider.setValue(MainView.currentTime / MainView.totalTime * 100);
+        });
+        MainView.timeSlider.valueProperty().addListener(ov->{
+            if (MainView.timeSlider.isValueChanging()){
+                player.seek(player.getTotalDuration().multiply(MainView.timeSlider.getValue() / 100));
+            }
+        });
+        player.volumeProperty().bind(MainView.volumnSlider.valueProperty().divide(100));
+        player.play();
+    }
+
+    public void seek(Duration duration){
+        player.seek(duration);
+    }
+
+    public void stop(){
+        player.stop();
+    }
+
+    public void play(){
+        player.play();
+    }
+
+    public void pause(){
+        player.pause();
     }
 
     public void printMusicInfo(){
