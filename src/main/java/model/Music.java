@@ -123,7 +123,7 @@ public class Music extends Mp3File{
         return albumImageData;
     }
 
-    public long getLengthInSeconds(){
+    public long getLengthInSec(){
         return lengthInSeconds;
     }
 

@@ -5,7 +5,6 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.embed.swt.FXCanvas;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -16,7 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -30,9 +28,11 @@ import javafx.util.Duration;
 import model.Music;
 import model.MusicLabel;
 import model.MusicList;
+import service.GP;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.Iterator;
 
 
 public class MainView extends Application {
@@ -59,12 +59,8 @@ public class MainView extends Application {
     private Music currentMusic;
     private Double currentTime = new Double(0);
     private Double totalTime = new Double(0);
-    private int playMode = LIST_LOOP;
-
-    private static final String FONT_TYPE = "Times New Roman";
-    private static final int SELF_LOOP = 1;
-    private static final int LIST_LOOP = 2;
-    private static final int RANDOM_LOOP = 3;
+    private int playMode = GP.SELF_LOOP;
+    private boolean firstTouchEnd = true;
 
     public void start(Stage primaryStage) throws Exception{
         setChoiceBox(primaryStage);
@@ -91,14 +87,14 @@ public class MainView extends Application {
         String listLoopStr = "List Loop";
         String randomLoopStr = "Random Loop";
         playModeChoice.setItems(FXCollections.observableArrayList(selfLoopStr, listLoopStr, randomLoopStr));
-        playModeChoice.getSelectionModel().select(1);
+        playModeChoice.getSelectionModel().select(GP.SELF_LOOP);
         playModeChoice.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 switch (newValue.intValue()){
-                    case SELF_LOOP: playMode = SELF_LOOP; break;
-                    case LIST_LOOP: playMode = LIST_LOOP; break;
-                    case RANDOM_LOOP: playMode = RANDOM_LOOP; break;
+                    case GP.SELF_LOOP: playMode = GP.SELF_LOOP; break;
+                    case GP.LIST_LOOP: playMode = GP.LIST_LOOP; break;
+                    case GP.RANDOM_LOOP: playMode = GP.RANDOM_LOOP; break;
                     default: break;
                 }
             }
@@ -120,9 +116,9 @@ public class MainView extends Application {
     }
 
     private void setLabel(Stage stage){
-        musicNameLabel.setFont(Font.font(FONT_TYPE, FontWeight.BOLD, FontPosture.REGULAR, 25));
+        musicNameLabel.setFont(Font.font(GP.ENG_FONT_TYPE, FontWeight.BOLD, FontPosture.REGULAR, 25));
         musicNameLabel.setAlignment(Pos.CENTER);
-        musicListLabel.setFont(Font.font(FONT_TYPE, FontWeight.LIGHT, FontPosture.REGULAR, 15));
+        musicListLabel.setFont(Font.font(GP.ENG_FONT_TYPE, FontWeight.LIGHT, FontPosture.REGULAR, 15));
         musicListLabel.setAlignment(Pos.CENTER);
     }
 
@@ -227,13 +223,31 @@ public class MainView extends Application {
     private void updateMediaPlayer(){
         Media media = new Media(new File(currentMusic.getFilename()).toURI().toString());
         mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.seek(Duration.ZERO);
         mediaPlayer.setOnReady(() -> {
             totalTime = mediaPlayer.getStopTime().toSeconds();
         });
         mediaPlayer.setOnEndOfMedia(() -> {
-            mediaPlayer.stop();
-            mediaPlayer.seek(Duration.ZERO);
-            mediaPlayer.play();
+            switch (playMode){
+                case GP.SELF_LOOP:
+                    mediaPlayer.stop();
+                    mediaPlayer.seek(Duration.ZERO);
+                    mediaPlayer.play();
+                    break;
+                case GP.LIST_LOOP:
+                case GP.RANDOM_LOOP:
+                    currentMusic = musicList.getNextMusic(currentMusic, playMode);
+                    System.out.println("Switch to " + currentMusic.getTitle());
+                    updateMediaPlayer();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            runButton.setText("PAUSE");
+                            updateUI(currentMusic, false);
+                        }
+                    });
+                    break;
+            }
         });
         mediaPlayer.currentTimeProperty().addListener(ov->{
             currentTime = mediaPlayer.getCurrentTime().toSeconds();
@@ -259,8 +273,8 @@ public class MainView extends Application {
     private void updateMusicList(Music music, boolean addNewMusicLabel){
         if (addNewMusicLabel) {
             MusicLabel musicLabel = new MusicLabel();
-            musicLabel.setFont(Font.font(FONT_TYPE, FontWeight.LIGHT, FontPosture.REGULAR, 13));
-            musicLabel.setText(music.getTitle() + "---" + music.getArtist());
+            musicLabel.setFont(Font.font(GP.ENG_FONT_TYPE, FontWeight.LIGHT, FontPosture.REGULAR, 13));
+            musicLabel.setText(music.getTitle() + "---" + music.getArtist() + "     " + secToStr(new Double(music.getLengthInSec())));
             musicLabel.setMusic(music);
             musicLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -269,6 +283,7 @@ public class MainView extends Application {
                         if (currentMusic != null)
                             mediaPlayer.stop();
                         currentMusic = ((MusicLabel) event.getSource()).getMusic();
+                        mediaPlayer.seek(Duration.ZERO);
                         updateMediaPlayer();
                         Platform.runLater(new Runnable() {
                             @Override

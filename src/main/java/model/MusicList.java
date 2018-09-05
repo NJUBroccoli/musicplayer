@@ -1,6 +1,9 @@
 package model;
 
+import service.GP;
+
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Vector;
 
 public class MusicList {
@@ -42,6 +45,28 @@ public class MusicList {
             }
         }
         System.out.println("Cannot find the music you want to open.");
+        return null;
+    }
+
+    public Music getNextMusic(Music currentMusic, int playMode){
+        if (musics.isEmpty()){
+            System.out.println("The music list is empty, and next music cannot be played.");
+            return null;
+        }
+        if (playMode == GP.LIST_LOOP){
+            Iterator<Music> iterator = musics.iterator();
+            while (iterator.hasNext()){
+                Music music = iterator.next();
+                if (music == currentMusic)
+                    return iterator.hasNext()? iterator.next() : musics.elementAt(0);
+            }
+        }
+        else if (playMode == GP.RANDOM_LOOP){
+            Random random = new Random();
+            int musicNum = musics.size();
+            int nextIndex = random.nextInt(musicNum);
+            return musics.elementAt(nextIndex);
+        }
         return null;
     }
 
