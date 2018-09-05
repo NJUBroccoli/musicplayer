@@ -20,7 +20,7 @@ public class MusicList {
             }
         }
         musics.add(music);
-
+        printMusicInfo();
     }
     public void delete(Music music){
         Iterator<Music> iterator = musics.iterator();
@@ -43,5 +43,12 @@ public class MusicList {
         }
         System.out.println("Cannot find the music you want to open.");
         return null;
+    }
+
+    private void printMusicInfo(){
+        Iterator<Music> iterator = musics.iterator();
+        for (;iterator.hasNext();){
+            iterator.next().printMusicInfo();
+        }
     }
 }

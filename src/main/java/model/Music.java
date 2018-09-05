@@ -39,7 +39,6 @@ public class Music extends Mp3File{
         else
             ID3V = 0;
         fillData();
-        printMusicInfo();
     }
 
     public void printMusicInfo(){

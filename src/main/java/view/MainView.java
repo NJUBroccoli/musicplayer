@@ -142,6 +142,7 @@ public class MainView extends Application {
             @Override
             public void handle(ActionEvent event) {
                 FileChooser fileChooser = new FileChooser();
+                fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("MP3 Music", "*.mp3"));
                 choosedFile = fileChooser.showOpenDialog(stage);
                 if (choosedFile != null && !validFileType(choosedFile)){
                     System.out.println("Invalid file type: only .mp3 are allowed.");
