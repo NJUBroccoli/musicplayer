@@ -7,15 +7,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -137,6 +136,7 @@ public class MainView extends Application {
         borderPane.setCenter(imageVBox);
         borderPane.setBottom(controlPane);
         borderPane.setLeft(musicListVBox);
+        borderPane.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
     private void setBox(Stage stage){
@@ -243,6 +243,7 @@ public class MainView extends Application {
                     if (event.getClickCount() > 1) {
                         if (currentMusic != null)
                             currentMusic.stop();
+
                         currentMusic = ((MusicLabel) event.getSource()).getMusic();
                         currentMusic.seek(Duration.ZERO);
                         currentMusic.play();

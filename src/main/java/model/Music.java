@@ -67,6 +67,7 @@ public class Music extends Mp3File{
                     player.stop();
                     player.seek(Duration.ZERO);
                     MainView.currentMusic = MainView.musicList.getNextMusic(MainView.currentMusic, MainView.playMode);
+                    MainView.totalTime = MainView.currentMusic.getStopTime().toSeconds();
                     MainView.currentMusic.stop();
                     MainView.currentMusic.seek(Duration.ZERO);
                     MainView.currentMusic.play();
@@ -104,6 +105,10 @@ public class Music extends Mp3File{
 
     public void pause(){
         player.pause();
+    }
+
+    public Duration getStopTime(){
+        return player.getStopTime();
     }
 
     public void printMusicInfo(){
